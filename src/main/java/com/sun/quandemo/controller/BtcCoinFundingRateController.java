@@ -24,7 +24,10 @@ public class BtcCoinFundingRateController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final int LIMIT = 1000;
-    private static final String COIN_BASE_URL = "https://dapi.binance.com/dapi/v1";
+
+    private static final String ANNUAL_COIN_BASE_URL = "https://dapi.binance.com/dapi/v1/fundingRate?symbol=%s&limit=%d";
+    private static final String CURRENT_COIN_BASE_URL = "https://dapi.binance.com/dapi/v1/premiumIndex?symbol=%s";
+
     private static final String SYMBOL = "BTCUSD_PERP";
     private static final int FUNDING_INTERVALS_PER_DAY = 3; // 每天3次资金费率
     private static final int DAYS_PER_YEAR = 365;
@@ -33,7 +36,7 @@ public class BtcCoinFundingRateController {
     @GetMapping("/annual-rate")
     public ResponseData<Map<String, Double>> calculateAnnualRate() {
         log.info("Calculating annual funding rate for BTC coin-margined perpetual");
-        String url = String.format("%s/fundingRate?symbol=%s&limit=%d", COIN_BASE_URL, SYMBOL, LIMIT);
+        String url = String.format(ANNUAL_COIN_BASE_URL, SYMBOL, LIMIT);
 
         try {
             String response = restTemplate.getForObject(url, String.class);
@@ -68,7 +71,7 @@ public class BtcCoinFundingRateController {
     @GetMapping("/current-rate")
     public ResponseData getCurrentFundingRate() {
         log.info("Getting current funding rate for BTC coin-margined perpetual");
-        String url = String.format("%s/premiumIndex?symbol=%s", COIN_BASE_URL, SYMBOL);
+        String url = String.format(CURRENT_COIN_BASE_URL, SYMBOL);
 
         try {
             String response = restTemplate.getForObject(url, String.class);
@@ -89,7 +92,7 @@ public class BtcCoinFundingRateController {
     @GetMapping("/max-rate")
     public ResponseData getMaxFundingRate() {
         log.info("Getting current funding rate for BTC coin-margined perpetual");
-        String url = String.format("%s/fundingRate?symbol=%s&limit=%d", COIN_BASE_URL, SYMBOL, LIMIT);
+        String url = String.format(ANNUAL_COIN_BASE_URL, SYMBOL, LIMIT);
 
         try {
             String response = restTemplate.getForObject(url, String.class);
