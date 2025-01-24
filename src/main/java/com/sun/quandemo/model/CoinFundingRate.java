@@ -1,57 +1,59 @@
 package com.sun.quandemo.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-/**
- * 币本位永续合约资金费率数据模型
- */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)  // 忽略所有未知字段
 public class CoinFundingRate {
-    
-    /**
-     * 交易对名称，例如：BTCUSD_PERP
-     */
+
     private String symbol;
-
-    /**
-     * 标记价格，用于计算未实现盈亏
-     */
-    @JsonProperty("markPrice")
+    private long fundingTime;  // 原始时间戳
+    private String fundingRate;
     private String markPrice;
+    private String formattedFundingTime;  // 格式化后的时间
 
-    /**
-     * 指数价格，反映现货市场价格
-     */
-    @JsonProperty("indexPrice")
-    private String indexPrice;
 
-    /**
-     * 预估结算价格
-     */
-    @JsonProperty("estimatedSettlePrice")
-    private String estimatedSettlePrice;
+    // 默认构造函数
+    public CoinFundingRate() {
+    }
 
-    /**
-     * 最近一次的资金费率
-     */
-    @JsonProperty("lastFundingRate")
-    private String lastFundingRate;
+    // 构造函数，使用@JsonCreator和@JsonProperty确保Jackson能够正确映射字段
+    @JsonCreator
+    public CoinFundingRate(
+            @JsonProperty("symbol") String symbol,
+            @JsonProperty("fundingTime") long fundingTime,
+            @JsonProperty("fundingRate") String fundingRate,
+            @JsonProperty("markPrice") String markPrice) {
+        this.symbol = symbol;
+        this.fundingTime = fundingTime;
+        this.fundingRate = fundingRate;
+        this.markPrice = markPrice;
+        this.formattedFundingTime = formatFundingTime(fundingTime);  // 格式化时间
+    }
 
-    /**
-     * 下次资金费率结算时间（时间戳，毫秒）
-     */
-    @JsonProperty("nextFundingTime")
-    private Long nextFundingTime;
+    // 格式化时间戳为指定的格式
+    public static String formatFundingTime(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        Date date = new Date(timestamp);
+        return sdf.format(date);  // 返回格式化后的时间
+    }
 
-    /**
-     * 基础利率
-     */
-    @JsonProperty("interestRate")
-    private String interestRate;
 
-    /**
-     * 数据更新时间（时间戳，毫秒）
-     */
-    private Long time;
-} 
+
+    @Override
+    public String toString() {
+        return "CoinFundingRate{" +
+                "symbol='" + symbol + '\'' +
+                ", fundingTime=" + fundingTime +
+                ", fundingRate='" + fundingRate + '\'' +
+                ", markPrice='" + markPrice + '\'' +
+                ", formattedFundingTime='" + formattedFundingTime + '\'' +
+                '}';
+    }
+}
