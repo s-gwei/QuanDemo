@@ -55,6 +55,11 @@ public class SpotSymbol {
     private Integer quotePrecision;
 
     /**
+     * 合约类型
+     */
+    private String contractType;
+
+    /**
      * 数量精度
      */
     private Integer baseAssetPrecision;

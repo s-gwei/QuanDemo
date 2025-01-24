@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import com.sun.quandemo.model.CoinFundingRate;
 import com.sun.quandemo.model.ResponseData;
+import com.sun.quandemo.constant.BinanceApiConstants;
 
 @Slf4j
 @RestController
@@ -25,8 +26,11 @@ public class BtcCoinFundingRateController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final int LIMIT = 1000;
 
-    private static final String ANNUAL_COIN_BASE_URL = "https://dapi.binance.com/dapi/v1/fundingRate?symbol=%s&limit=%d";
-    private static final String CURRENT_COIN_BASE_URL = "https://dapi.binance.com/dapi/v1/premiumIndex?symbol=%s";
+    private static final String ANNUAL_COIN_BASE_URL = BinanceApiConstants.SPOT_EXCHANGE_INFO
+        + "?symbol=%s&limit=%d";
+
+    private static final String CURRENT_COIN_BASE_URL = BinanceApiConstants.SPOT_EXCHANGE_INFO
+        + "?symbol=%s";
 
     private static final String SYMBOL = "BTCUSD_PERP";
     private static final int FUNDING_INTERVALS_PER_DAY = 3; // 每天3次资金费率

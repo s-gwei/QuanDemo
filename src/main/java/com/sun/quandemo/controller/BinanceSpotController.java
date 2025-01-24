@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.quandemo.model.ResponseData;
 import com.sun.quandemo.model.SpotSymbol;
+import com.sun.quandemo.constant.BinanceApiConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class BinanceSpotController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
     //现货api
-    private static final String SPOT_BASE_URL = "https://api.binance.com/api/v3/exchangeInfo";
+    private static final String SPOT_BASE_URL = BinanceApiConstants.USD_FUTURE_DOMAIN + BinanceApiConstants.USD_EXCHANGE_INFO;
 
     @GetMapping("/symbols")
     public ResponseData<List<SpotSymbol>> getAllSpotSymbols() {
